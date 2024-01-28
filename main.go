@@ -15,7 +15,8 @@ func main() {
 
 	list.Add(5)
 
-	if data, err := list.RemoveLast(); err == nil {
+	n := doublylinkedlist.NewNode(5, list.Head, nil)
+	if data, err := list.Remove(n); err == nil {
 		fmt.Println(data)
 	} else {
 		_ = fmt.Errorf(err.Error())

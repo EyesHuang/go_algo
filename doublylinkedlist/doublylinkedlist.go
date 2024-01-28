@@ -1,6 +1,8 @@
 package doublylinkedlist
 
-import "errors"
+import (
+	"errors"
+)
 
 type Node[T any] struct {
 	data T
@@ -126,10 +128,10 @@ func (list *DoublyLinkedList[T]) PeekLast() T {
 	return list.Tail.data
 }
 
-func (list *DoublyLinkedList[T]) RemoveFirst() T {
+func (list *DoublyLinkedList[T]) RemoveFirst() (T, error) {
 	var zero T
 	if list.IsEmpty() {
-		return zero
+		return zero, errors.New("empty list")
 	}
 
 	d := list.Head.data
@@ -142,7 +144,7 @@ func (list *DoublyLinkedList[T]) RemoveFirst() T {
 		list.Head.prev = nil
 	}
 
-	return d
+	return d, nil
 }
 
 func (list *DoublyLinkedList[T]) RemoveLast() (T, error) {
@@ -163,4 +165,28 @@ func (list *DoublyLinkedList[T]) RemoveLast() (T, error) {
 	}
 
 	return d, nil
+}
+
+func (list *DoublyLinkedList[T]) Remove(node *Node[T]) (T, error) {
+	var zero T
+	if list.IsEmpty() {
+		return zero, errors.New("empty list")
+	}
+
+	if node.prev == nil {
+		return list.RemoveFirst()
+	} else if node.next == nil {
+		return list.RemoveLast()
+	} else {
+		prev := node.prev
+		next := node.next
+
+		prev.next = next
+		next.prev = prev
+
+		node.prev = nil
+		node.next = nil
+		list.S--
+		return node.data, nil
+	}
 }
