@@ -190,3 +190,25 @@ func (list *DoublyLinkedList[T]) Remove(node *Node[T]) (T, error) {
 		return node.data, nil
 	}
 }
+
+func (list *DoublyLinkedList[T]) RemoveAt(index int) (T, error) {
+	var zero T
+	if index >= list.S || index < 0 {
+		return zero, errors.New("index out of bounds")
+	}
+
+	var current *Node[T]
+	if index < list.S/2 {
+		current = list.Head
+		for i := 0; i != index; i++ {
+			current = current.next
+		}
+	} else {
+		current = list.Tail
+		for i := list.S - 1; i != index; i-- {
+			current = current.prev
+		}
+	}
+
+	return list.Remove(current)
+}

@@ -15,11 +15,10 @@ func main() {
 
 	list.Add(5)
 
-	n := doublylinkedlist.NewNode(5, list.Head, nil)
-	if data, err := list.Remove(n); err == nil {
+	if data, err := list.RemoveAt(2); err == nil {
 		fmt.Println(data)
 	} else {
-		_ = fmt.Errorf(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	if !list.IsEmpty() {
