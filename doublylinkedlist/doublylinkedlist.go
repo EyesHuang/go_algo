@@ -2,6 +2,7 @@ package doublylinkedlist
 
 import (
 	"errors"
+	"reflect"
 )
 
 type Node[T any] struct {
@@ -167,7 +168,7 @@ func (list *DoublyLinkedList[T]) RemoveLast() (T, error) {
 	return d, nil
 }
 
-func (list *DoublyLinkedList[T]) Remove(node *Node[T]) (T, error) {
+func (list *DoublyLinkedList[T]) RemoveByNode(node *Node[T]) (T, error) {
 	var zero T
 	if list.IsEmpty() {
 		return zero, errors.New("empty list")
@@ -210,5 +211,49 @@ func (list *DoublyLinkedList[T]) RemoveAt(index int) (T, error) {
 		}
 	}
 
-	return list.Remove(current)
+	return list.RemoveByNode(current)
+}
+
+func (list *DoublyLinkedList[T]) RemoveByValue(obj T) (bool, error) {
+	if list.IsEmpty() {
+		return false, errors.New("empty list")
+	}
+
+	t := list.Head
+	find := false
+	for i := 0; i < list.S; i++ {
+		if reflect.DeepEqual(t.data, obj) {
+			find = true
+			break
+		}
+		t = t.next
+	}
+
+	if !find {
+		return false, errors.New("not found the object")
+	}
+
+	if t.prev == nil {
+		if _, err := list.RemoveFirst(); err == nil {
+			return true, nil
+		} else {
+			return false, err
+		}
+	} else if t.next == nil {
+		if _, err := list.RemoveLast(); err == nil {
+			return true, nil
+		} else {
+			return false, err
+		}
+	} else {
+		prev := t.prev
+		next := t.next
+
+		prev.next = next
+		next.prev = prev
+		t.prev = nil
+		t.next = nil
+		list.S--
+		return true, nil
+	}
 }

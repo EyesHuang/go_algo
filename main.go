@@ -15,7 +15,7 @@ func main() {
 
 	list.Add(5)
 
-	if data, err := list.RemoveAt(2); err == nil {
+	if data, err := list.RemoveByValue(5); err == nil {
 		fmt.Println(data)
 	} else {
 		fmt.Println(err.Error())
