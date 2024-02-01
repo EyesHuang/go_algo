@@ -219,43 +219,19 @@ func (list *DoublyLinkedList[T]) RemoveByValue(obj T) (bool, error) {
 		return false, errors.New("empty list")
 	}
 
-	t := list.Head
-	find := false
-	for i := 0; i < list.S; i++ {
-		if reflect.DeepEqual(t.data, obj) {
-			find = true
-			break
-		}
-		t = t.next
-	}
+	current := list.Head
 
-	if !find {
-		return false, errors.New("not found the object")
-	}
-
-	if t.prev == nil {
-		if _, err := list.RemoveFirst(); err == nil {
-			return true, nil
-		} else {
-			return false, err
+	for current != nil {
+		if reflect.DeepEqual(current.data, obj) {
+			if _, err := list.RemoveByNode(current); err != nil {
+				return false, err
+			} else {
+				return true, nil
+			}
 		}
-	} else if t.next == nil {
-		if _, err := list.RemoveLast(); err == nil {
-			return true, nil
-		} else {
-			return false, err
-		}
-	} else {
-		prev := t.prev
-		next := t.next
-
-		prev.next = next
-		next.prev = prev
-		t.prev = nil
-		t.next = nil
-		list.S--
-		return true, nil
+		current = current.next
 	}
+	return false, errors.New("not found the object")
 }
 
 func (list *DoublyLinkedList[T]) IndexOf(obj T) int {

@@ -16,8 +16,9 @@ func main() {
 	list.Add(5)
 	list.Add(6)
 
-	index := list.IndexOf(10)
-	fmt.Println(index)
+	if check, err := list.RemoveByValue(5); err == nil {
+		fmt.Println(check)
+	}
 
 	if !list.IsEmpty() {
 		fmt.Println(list)
