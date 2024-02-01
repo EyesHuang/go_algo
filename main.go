@@ -14,12 +14,10 @@ func main() {
 	}
 
 	list.Add(5)
+	list.Add(6)
 
-	if data, err := list.RemoveByValue(5); err == nil {
-		fmt.Println(data)
-	} else {
-		fmt.Println(err.Error())
-	}
+	index := list.IndexOf(10)
+	fmt.Println(index)
 
 	if !list.IsEmpty() {
 		fmt.Println(list)

@@ -257,3 +257,23 @@ func (list *DoublyLinkedList[T]) RemoveByValue(obj T) (bool, error) {
 		return true, nil
 	}
 }
+
+func (list *DoublyLinkedList[T]) IndexOf(obj T) int {
+	t := list.Head
+	find := false
+	i := 0
+
+	for ; i < list.S; i++ {
+		if reflect.DeepEqual(t.data, obj) {
+			find = true
+			break
+		}
+		t = t.next
+	}
+
+	if !find {
+		return -1
+	} else {
+		return i
+	}
+}
