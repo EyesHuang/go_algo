@@ -16,8 +16,8 @@ func main() {
 	list.Add(5)
 	list.Add(6)
 
-	if check, err := list.RemoveByValue(5); err == nil {
-		fmt.Println(check)
+	if err := list.AddAt(2, 7); err != nil {
+		fmt.Println(err)
 	}
 
 	if !list.IsEmpty() {

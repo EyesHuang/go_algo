@@ -83,32 +83,40 @@ func (list *DoublyLinkedList[T]) Add(elem T) {
 	list.AddLast(elem)
 }
 
-func (list *DoublyLinkedList[T]) AddAt(index int, data T) {
+func (list *DoublyLinkedList[T]) AddAt(index int, data T) error {
 	if index < 0 || index > list.S {
-		return
+		return errors.New("index out of bounds")
 	}
 
-	switch index {
-	case 0:
+	if index == 0 {
 		list.AddFirst(data)
-		break
-	case list.S:
+		return nil
+	} else if index == list.S {
 		list.AddLast(data)
-		break
+		return nil
 	}
 
-	t := list.Head
-	for i := 0; i < index; i++ {
-		t = t.next
+	var current *Node[T]
+
+	if index < list.S/2 {
+		current = list.Head
+		for i := 0; i < index-1; i++ {
+			current = current.next
+		}
+	} else if index > list.S/2 {
+		current = list.Tail
+		for i := list.S - 1; i >= index; i-- {
+			current = current.prev
+		}
 	}
 
-	prev := t.prev
-	n := NewNode(data, prev, t)
+	newNode := NewNode(data, current, current.next)
 
-	prev.next = n
-	t.prev = n
+	current.next = newNode
+	current.next.prev = newNode
 
 	list.S++
+	return nil
 }
 
 func (list *DoublyLinkedList[T]) PeekFirst() T {
