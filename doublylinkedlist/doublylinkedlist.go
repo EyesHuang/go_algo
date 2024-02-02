@@ -246,3 +246,7 @@ func (list *DoublyLinkedList[T]) IndexOf(obj T) int {
 
 	return -1
 }
+
+func (list *DoublyLinkedList[T]) Contains(obj T) bool {
+	return list.IndexOf(obj) != -1
+}
