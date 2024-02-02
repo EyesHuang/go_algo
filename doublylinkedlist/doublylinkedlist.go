@@ -119,22 +119,22 @@ func (list *DoublyLinkedList[T]) AddAt(index int, data T) error {
 	return nil
 }
 
-func (list *DoublyLinkedList[T]) PeekFirst() T {
+func (list *DoublyLinkedList[T]) PeekFirst() (T, error) {
 	var zero T
 
 	if list.IsEmpty() {
-		return zero
+		return zero, errors.New("empty list")
 	}
-	return list.Head.data
+	return list.Head.data, nil
 }
 
-func (list *DoublyLinkedList[T]) PeekLast() T {
+func (list *DoublyLinkedList[T]) PeekLast() (T, error) {
 	var zero T
 
 	if list.IsEmpty() {
-		return zero
+		return zero, errors.New("empty list")
 	}
-	return list.Tail.data
+	return list.Tail.data, nil
 }
 
 func (list *DoublyLinkedList[T]) RemoveFirst() (T, error) {
