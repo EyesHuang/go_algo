@@ -176,7 +176,7 @@ func TestDoublyLinkedList_IndexOf(t *testing.T) {
 	}
 }
 
-func TestContains(t *testing.T) {
+func TestDoublyLinkedList_Contains(t *testing.T) {
 	list := &DoublyLinkedList[int]{}
 	list.AddLast(1)
 	list.AddLast(2)
@@ -191,7 +191,7 @@ func TestContains(t *testing.T) {
 	}
 }
 
-func TestPeekFirst(t *testing.T) {
+func TestDoublyLinkedList_PeekFirst(t *testing.T) {
 	list := &DoublyLinkedList[int]{}
 
 	if _, err := list.PeekFirst(); err == nil {
@@ -206,7 +206,7 @@ func TestPeekFirst(t *testing.T) {
 	}
 }
 
-func TestPeekLast(t *testing.T) {
+func TestDoublyLinkedList_PeekLast(t *testing.T) {
 	list := &DoublyLinkedList[int]{}
 
 	if _, err := list.PeekLast(); err == nil {
@@ -221,7 +221,7 @@ func TestPeekLast(t *testing.T) {
 	}
 }
 
-func TestIsEmpty(t *testing.T) {
+func TestDoublyLinkedList_IsEmpty(t *testing.T) {
 	list := &DoublyLinkedList[int]{}
 
 	if !list.IsEmpty() {
