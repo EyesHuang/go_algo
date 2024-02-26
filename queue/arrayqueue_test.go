@@ -2,8 +2,8 @@ package queue
 
 import "testing"
 
-func TestListQueue_Size(t *testing.T) {
-	q := NewListQueue[int]()
+func TestArrayQueue_Size(t *testing.T) {
+	q := NewArrayQueue[int]()
 
 	if !q.IsEmpty() {
 		t.Errorf("Expected size 0, got %d", q.Size())
@@ -17,8 +17,8 @@ func TestListQueue_Size(t *testing.T) {
 	}
 }
 
-func TestListQueue_IsEmpty(t *testing.T) {
-	q := NewListQueue[int]()
+func TestArrayQueue_IsEmpty(t *testing.T) {
+	q := NewArrayQueue[int]()
 	q.Offer(1)
 	q.Offer(2)
 
@@ -35,8 +35,8 @@ func TestListQueue_IsEmpty(t *testing.T) {
 	}
 }
 
-func TestListQueue_Offer(t *testing.T) {
-	q := NewListQueue[int]()
+func TestArrayQueue_Offer(t *testing.T) {
+	q := NewArrayQueue[int]()
 	q.Offer(1)
 	q.Offer(2)
 
@@ -49,8 +49,8 @@ func TestListQueue_Offer(t *testing.T) {
 	}
 }
 
-func TestListQueue_Poll(t *testing.T) {
-	q := NewListQueue[int]()
+func TestArrayQueue_Poll(t *testing.T) {
+	q := NewArrayQueue[int]()
 
 	if elem, err := q.Poll(); err == nil || elem != 0 {
 		t.Errorf("Expected empty queue to have error when polling")
@@ -64,8 +64,8 @@ func TestListQueue_Poll(t *testing.T) {
 	}
 }
 
-func TestListQueue_Peek(t *testing.T) {
-	q := NewListQueue[int]()
+func TestArrayQueue_Peek(t *testing.T) {
+	q := NewArrayQueue[int]()
 
 	if elem, err := q.Peek(); err == nil || elem != 0 {
 		t.Errorf("Expected emptyt queue to have error when peeking")

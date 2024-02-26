@@ -45,5 +45,5 @@ func (lq *ListQueue[T]) Peek() (T, error) {
 		return zero, errors.New("queue is empty")
 	}
 
-	return lq.List.Back().Value.(T), nil
+	return lq.List.Front().Value.(T), nil
 }
