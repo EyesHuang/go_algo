@@ -1,6 +1,9 @@
 package bst
 
-import "golang.org/x/exp/constraints"
+import (
+	"fmt"
+	"golang.org/x/exp/constraints"
+)
 
 type Node[T constraints.Ordered] struct {
 	Value       T
@@ -62,4 +65,13 @@ func (bst *BinarySearchTree[T]) LookUp(value T) *Node[T] {
 	}
 
 	return nil
+}
+
+// PreOrder print the nodes as you visit them for the first time. VLR
+func (bst *BinarySearchTree[T]) PreOrder(current *Node[T]) {
+	for current != nil {
+		fmt.Println(current.Value)
+		bst.PreOrder(current.Left)
+		bst.PreOrder(current.Right)
+	}
 }
