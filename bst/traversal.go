@@ -2,52 +2,130 @@ package bst
 
 import (
 	"fmt"
+	"strings"
 )
 
 type TreeNode struct {
 	leftChild  *TreeNode
 	rightChild *TreeNode
 	parent     *TreeNode
-	str        string
-}
-
-func NewTreeNode(s string) *TreeNode {
-	return &TreeNode{str: s}
+	data       rune
 }
 
 type BinaryTree struct {
 	root *TreeNode
 }
 
-func NewBinaryTree(node *TreeNode) *BinaryTree {
-	return &BinaryTree{root: node}
+func NewTreeNode(data rune) *TreeNode {
+	return &TreeNode{data: data}
 }
 
-func (bt *BinaryTree) PreOrder(current *TreeNode) {
-	if current == nil {
-		return
-	}
-	fmt.Print(current.str, " ")
-	bt.PreOrder(current.leftChild)
-	bt.PreOrder(current.rightChild)
+func NewBinaryTree(data string) *BinaryTree {
+	tree := &BinaryTree{}
+	tree.LevelOrderConstruct(data)
+	return tree
 }
 
-func (bt *BinaryTree) InOrder(current *TreeNode) {
-	if current == nil {
+func (bt *BinaryTree) LevelOrderConstruct(data string) {
+	fields := strings.Fields(data)
+	if len(fields) == 0 {
 		return
 	}
-	bt.InOrder(current.leftChild)
-	fmt.Print(current.str, " ")
-	bt.InOrder(current.rightChild)
+
+	rootData := rune(fields[0][0])
+	if rootData == 'x' { // Assuming 'x' stands for no node
+		return
+	}
+
+	bt.root = NewTreeNode(rootData)
+	queue := []*TreeNode{bt.root}
+	index := 1
+
+	for len(queue) > 0 && index < len(fields) {
+		current := queue[0]
+		queue = queue[1:]
+
+		// Handle left child
+		if index < len(fields) && fields[index][0] != 'x' {
+			current.leftChild = NewTreeNode(rune(fields[index][0]))
+			current.leftChild.parent = current
+			queue = append(queue, current.leftChild)
+		}
+		index++
+
+		// Handle right child
+		if index < len(fields) && fields[index][0] != 'x' {
+			current.rightChild = NewTreeNode(rune(fields[index][0]))
+			current.rightChild.parent = current
+			queue = append(queue, current.rightChild)
+		}
+		index++
+	}
 }
 
-func (bt *BinaryTree) PostOrder(current *TreeNode) {
-	if current == nil {
+func (bt *BinaryTree) InsertLevelOrder(data rune) {
+	newNode := NewTreeNode(data)
+	queue := []*TreeNode{bt.root}
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+
+		if current.leftChild == nil {
+			current.leftChild = newNode
+			newNode.parent = current
+			return
+		} else {
+			queue = append(queue, current.leftChild)
+		}
+
+		if current.rightChild == nil {
+			current.rightChild = newNode
+			newNode.parent = current
+			return
+		} else {
+			queue = append(queue, current.rightChild)
+		}
+	}
+}
+
+func (bt *BinaryTree) PreOrder() {
+	preOrder(bt.root)
+}
+
+func preOrder(node *TreeNode) {
+	if node == nil {
 		return
 	}
-	bt.PostOrder(current.leftChild)
-	bt.PostOrder(current.rightChild)
-	fmt.Print(current.str, " ")
+	fmt.Printf("%c ", node.data)
+	preOrder(node.leftChild)
+	preOrder(node.rightChild)
+}
+
+func (bt *BinaryTree) InOrder() {
+	inOrder(bt.root)
+}
+
+func inOrder(node *TreeNode) {
+	if node == nil {
+		return
+	}
+	inOrder(node.leftChild)
+	fmt.Printf("%c ", node.data)
+	inOrder(node.rightChild)
+}
+
+func (bt *BinaryTree) PostOrder() {
+	postOrder(bt.root)
+}
+
+func postOrder(node *TreeNode) {
+	if node == nil {
+		return
+	}
+	postOrder(node.leftChild)
+	postOrder(node.rightChild)
+	fmt.Printf("%c ", node.data)
 }
 
 func (bt *BinaryTree) LevelOrder() {
@@ -60,7 +138,7 @@ func (bt *BinaryTree) LevelOrder() {
 	for len(queue) > 0 {
 		current := queue[0]
 		queue = queue[1:]
-		fmt.Print(current.str, " ")
+		fmt.Printf("%c ", current.data)
 
 		if current.leftChild != nil {
 			queue = append(queue, current.leftChild)
@@ -72,16 +150,16 @@ func (bt *BinaryTree) LevelOrder() {
 	}
 }
 
-func (bt *BinaryTree) leftMost(current *TreeNode) *TreeNode {
+func leftMost(current *TreeNode) *TreeNode {
 	for current.leftChild != nil {
 		current = current.leftChild
 	}
 	return current
 }
 
-func (bt *BinaryTree) InOrderSuccessor(current *TreeNode) *TreeNode {
+func inorderSuccessor(current *TreeNode) *TreeNode {
 	if current.rightChild != nil {
-		return bt.leftMost(current.rightChild)
+		return leftMost(current.rightChild)
 	}
 
 	successor := current.parent
@@ -94,25 +172,25 @@ func (bt *BinaryTree) InOrderSuccessor(current *TreeNode) *TreeNode {
 	return successor
 }
 
-func (bt *BinaryTree) InOrderByParent(root *TreeNode) {
-	current := bt.leftMost(root)
+func (bt *BinaryTree) InorderByParent() {
+	current := leftMost(bt.root)
 
 	for current != nil {
-		fmt.Print(current.str, " ")
-		current = bt.InOrderSuccessor(current)
+		fmt.Printf("%c ", current.data)
+		current = inorderSuccessor(current)
 	}
 }
 
-func (bt *BinaryTree) rightMost(current *TreeNode) *TreeNode {
+func rightMost(current *TreeNode) *TreeNode {
 	for current.rightChild != nil {
 		current = current.rightChild
 	}
 	return current
 }
 
-func (bt *BinaryTree) InOrderPredecessor(current *TreeNode) *TreeNode {
+func inorderPredecessor(current *TreeNode) *TreeNode {
 	if current.leftChild != nil {
-		return bt.rightMost(current.leftChild)
+		return rightMost(current.leftChild)
 	}
 
 	predecessor := current.parent
@@ -126,10 +204,10 @@ func (bt *BinaryTree) InOrderPredecessor(current *TreeNode) *TreeNode {
 }
 
 func (bt *BinaryTree) InOrderReverse(root *TreeNode) {
-	current := bt.rightMost(root)
+	current := rightMost(root)
 
 	for current != nil {
-		fmt.Print(current.str, " ")
-		current = bt.InOrderPredecessor(current)
+		fmt.Printf("%c ", current.data)
+		current = inorderPredecessor(current)
 	}
 }
