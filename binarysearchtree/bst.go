@@ -1,6 +1,9 @@
 package binarysearchtree
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // TreeNode structure
 type TreeNode struct {
@@ -125,4 +128,65 @@ func (bst *BST) LevelOrder() {
 			queue = append(queue, current.rightChild)
 		}
 	}
+}
+
+// DeleteBST deletes a node with the specified key in the BST
+func (bst *BST) DeleteBST(key int) error {
+	deleteNode := bst.Search(key) // Use the search function to find the node
+	if deleteNode == nil {
+		return errors.New("data not found")
+	}
+
+	y, x := bst.determineNodeToDelete(deleteNode)
+
+	// Reconnect the child x with the rest of the tree
+	bst.reconnectChild(x, y)
+
+	// If y is not the delete node, swap the contents
+	if y != deleteNode {
+		bst.swapContents(y, deleteNode)
+	}
+
+	return nil
+}
+
+// Helper function to determine the node to delete
+func (bst *BST) determineNodeToDelete(node *TreeNode) (*TreeNode, *TreeNode) {
+	if node.leftChild == nil || node.rightChild == nil {
+		return node, bst.getChild(node)
+	} else {
+		successor := inorderSuccessor(node)
+		return successor, bst.getChild(successor)
+	}
+}
+
+// Helper function to get the child of a node
+func (bst *BST) getChild(node *TreeNode) *TreeNode {
+	if node.leftChild != nil {
+		return node.leftChild
+	}
+	return node.rightChild
+}
+
+// Helper function to reconnect child with the BST
+func (bst *BST) reconnectChild(child, node *TreeNode) {
+	// Reconnect the child x with the rest of the tree
+	if child != nil {
+		child.parent = node.parent
+	}
+
+	// If y is the root, update the root to x
+	if node.parent == nil {
+		bst.root = child
+	} else if node == node.parent.leftChild {
+		node.parent.leftChild = child
+	} else {
+		node.parent.rightChild = child
+	}
+}
+
+// Helper function to swap the contents of two nodes
+func (bst *BST) swapContents(src, dest *TreeNode) {
+	dest.key = src.key
+	dest.element = src.element
 }

@@ -37,6 +37,16 @@ func TestBST_Search_Fail(t *testing.T) {
 	}
 }
 
+// Piccolo(513) Krillin(2) Goku(1000)
+func TestBST_DeleteBST(t *testing.T) {
+	bst := genBST()
+	if err := bst.DeleteBST(8); err != nil {
+		t.Errorf("It has error when delete element with key %d", 8)
+	}
+	bst.LevelOrder()
+	fmt.Println()
+}
+
 func genBST() *BST {
 	bst := NewBST()
 	bst.InsertBST(8, "Master Roshi")
